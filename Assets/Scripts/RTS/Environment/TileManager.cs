@@ -33,19 +33,29 @@ public class TileManager : MonoBehaviour
     public int Columns = 10;
     public int Rows = 10;
     public float ScaleFactor = 1.28f;
+    public float ScrollFactor = 0.01f;
     public int DenseTileChance = 33;
     public int SparseTileChance = 33;
     public int EmptyTileChance = 33;
+    public int MaxStarsToSpawn = 100;
     public GameObject[] DenseStarTiles;
     public GameObject[] SparseStarTiles;
     public GameObject[] EmptyStarTiles;
+    public GameObject[] IndividualStars;
+
+    public GameObject Camera;
 
     private Transform TileHolder;
+    private Transform StarHolder;
     private Dictionary<int, Tile> StarTiles = new Dictionary<int, Tile>();
+    private float PositionOffset;
 
     private void Start()
     {
         TileHolder = new GameObject("Tileset").transform;
+        StarHolder = new GameObject("Individual Stars").transform;
+
+        PositionOffset = ScaleFactor * (Rows / 2);
 
         int DenseTilesToSpawn = Random.Range(DenseTileChance / 2, DenseTileChance);
         int DenseTilesSpawned = 0;
@@ -156,6 +166,34 @@ public class TileManager : MonoBehaviour
 
         // Add final step, iterating through the map and ensuring that the tile is distinct from its neighbours by comparing
         // tile numbers for tiles of equal density types.
+        foreach (KeyValuePair<int, Tile> Entry in StarTiles)
+        {
+            Tile StarTile = Entry.Value;
+            int OutTileNumber = Entry.Value.Number;
+            int MaxTileNumber = EmptyStarTiles.Length - 1;
+
+            if (StarTiles.ContainsKey(Entry.Key + 1))
+            {
+                IncrementTileNumber(StarTile.Number, StarTiles[Entry.Key + 1].Number, MaxTileNumber, OutTileNumber);
+            }
+
+            if (StarTiles.ContainsKey(Entry.Key - 1))
+            {
+                IncrementTileNumber(StarTile.Number, StarTiles[Entry.Key - 1].Number, MaxTileNumber, OutTileNumber);
+            }
+
+            if (StarTiles.ContainsKey(Entry.Key + Rows))
+            {
+                IncrementTileNumber(StarTile.Number, StarTiles[Entry.Key + Rows].Number, MaxTileNumber, OutTileNumber);
+            }
+
+            if (StarTiles.ContainsKey(Entry.Key - Rows))
+            {
+                IncrementTileNumber(StarTile.Number, StarTiles[Entry.Key - Rows].Number, MaxTileNumber, OutTileNumber);
+            }
+
+            Entry.Value.Number = OutTileNumber;
+        }
 
         foreach (KeyValuePair<int, Tile> Entry in StarTiles)
         {
@@ -182,9 +220,22 @@ public class TileManager : MonoBehaviour
 
             if (TileToInstantiate)
             {
-                GameObject TileInstance = Instantiate<GameObject>(TileToInstantiate, new Vector3(StarTile.x * ScaleFactor, StarTile.y * ScaleFactor, 0.0f), Quaternion.identity);
+                GameObject TileInstance = Instantiate<GameObject>(TileToInstantiate, new Vector3((StarTile.x * ScaleFactor) - PositionOffset, (StarTile.y * ScaleFactor) - PositionOffset, 0.0f), Quaternion.identity);
                 TileInstance.transform.SetParent(TileHolder);
             }
+        }
+
+        int StarsToSpawn = Random.Range(MaxStarsToSpawn / 2, MaxStarsToSpawn);
+        for (int i = 0; i < StarsToSpawn; i++)
+        {
+            GameObject StarToInstantiate = IndividualStars[Random.Range(0, IndividualStars.Length)];
+
+            float XPosition = Random.Range(-(ScaleFactor * (Columns)), ScaleFactor * (Columns));
+            float YPosition = Random.Range(-(ScaleFactor * (Rows)), ScaleFactor * (Rows));
+            Vector3 RandomPosition = new Vector3(XPosition, YPosition, 0.0f);
+
+            GameObject StarInstance = Instantiate<GameObject>(StarToInstantiate, RandomPosition, Quaternion.identity);
+            StarInstance.transform.SetParent(StarHolder);
         }
     }
 
@@ -208,8 +259,26 @@ public class TileManager : MonoBehaviour
         }
     }
 
+    private void IncrementTileNumber(int InTileNum, int NeighbourTileNum, int Max, int OutTileNum)
+    {
+        if (InTileNum == NeighbourTileNum)
+        {
+            if (InTileNum == Max)
+            {
+                OutTileNum = 0;
+            }
+            else
+            {
+                OutTileNum = InTileNum + 1;
+            }
+        }
+    }
+
     private void Update()
     {
-        
+        Vector2 ScrollDist = new Vector2(Camera.transform.position.x * ScrollFactor, Camera.transform.position.y * ScrollFactor);
+        Vector2 StarScrollDist = ScrollDist / 2;
+        TileHolder.position = new Vector3(ScrollDist.x, ScrollDist.y, TileHolder.transform.position.z);
+        StarHolder.position = new Vector3(StarScrollDist.x, StarScrollDist.y, StarHolder.position.z);
     }
 }

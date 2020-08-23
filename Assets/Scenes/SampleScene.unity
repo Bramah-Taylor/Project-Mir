@@ -502,21 +502,43 @@ MonoBehaviour:
   Columns: 10
   Rows: 10
   ScaleFactor: 1.28
+  ScrollFactor: 0.85
   DenseTileChance: 10
   SparseTileChance: 35
   EmptyTileChance: 50
+  MaxStarsToSpawn: 100
   DenseStarTiles:
   - {fileID: 8612379638671627029, guid: 5f89e1245e3113440b614bafb382d569, type: 3}
   - {fileID: 3232125772466009904, guid: 85214a435810ddd449b75bf93a3a09a6, type: 3}
   - {fileID: 3243794482013512771, guid: cb76f0b1021ef0842b8a81b76946f6d6, type: 3}
+  - {fileID: 8002798796830929925, guid: f9e6efd7a82ef774887a2066d074fcfd, type: 3}
+  - {fileID: 5727218770895166299, guid: 72c3999e2b8619b4ab9b68dd1e02cdf1, type: 3}
   SparseStarTiles:
   - {fileID: 5504161090111729973, guid: 4ea4b743247326c49a6e4da3e235f724, type: 3}
   - {fileID: 4862879462662237921, guid: 3ea9433b4e57fcc4194a1f0c9c8eb340, type: 3}
   - {fileID: 4498916678887665486, guid: a975511eeb63e584a910e2313f738183, type: 3}
+  - {fileID: 1294085805765381992, guid: b6e806b92078aa243bfc8aaf06605edd, type: 3}
+  - {fileID: 8057910138483382797, guid: d0eefe00cf1790248ba3d473f85db135, type: 3}
   EmptyStarTiles:
   - {fileID: 4993156859849111233, guid: f98b89e62dea5644ea98571552eb24a5, type: 3}
   - {fileID: 8914821743451096311, guid: 18c6e24b5e3102f4b916fcebf4dbebc3, type: 3}
   - {fileID: 3651291389130881553, guid: c5e15d566f579f148bda02dea5047eac, type: 3}
+  - {fileID: 2662721017533590054, guid: c6150322da9f5a042858c0c280843899, type: 3}
+  - {fileID: 4319491814615333634, guid: 3c4720eda066d8245a54ccada901b85d, type: 3}
+  IndividualStars:
+  - {fileID: 5126627021532600918, guid: cc1bc6b1e95427c46b06acf84000de44, type: 3}
+  - {fileID: 3013444620926638044, guid: 02f49e8e9ddb29641b15a4a6e986037d, type: 3}
+  - {fileID: 1562776024623799505, guid: d884524111ff92545a2893f17076695b, type: 3}
+  - {fileID: 8630684329521001611, guid: 6921893ed1f53574fbe80363962d8dba, type: 3}
+  - {fileID: 47103509490105755, guid: fc7b530efd6cbd74e93a2d417b29a4d2, type: 3}
+  - {fileID: 4905168201702760602, guid: f253386992774d54c990d23f38c83c8a, type: 3}
+  - {fileID: 4905044065596395460, guid: dd99ecf1b768ea04081c0bf089bc7e04, type: 3}
+  - {fileID: 6781271653914182482, guid: 8a733fe18f6c74b49859b4f03a9f2b24, type: 3}
+  - {fileID: 6517137184922045011, guid: 82b1f4f96f4514441a3e73428a5f04cb, type: 3}
+  - {fileID: 6493497659108588789, guid: b9ff3a0fc406bfb42aa7e5ce860debf3, type: 3}
+  - {fileID: 1050840390031051930, guid: 1f4daf6c40b3d57438422e36be39c13c, type: 3}
+  - {fileID: 4969335490143644776, guid: 89d80f9508978e842bf06017e89086e2, type: 3}
+  Camera: {fileID: 519420028}
 --- !u!4 &1899273980
 Transform:
   m_ObjectHideFlags: 0
