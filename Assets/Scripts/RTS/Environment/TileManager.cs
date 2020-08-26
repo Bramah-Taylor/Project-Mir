@@ -13,6 +13,7 @@ public class TileManager : MonoBehaviour
         Dense
     };
 
+    // Class that represents a star tile, and holds all of the information required for spawn checks.
     private class Tile
     {
         public TileDensity Type;
@@ -29,25 +30,43 @@ public class TileManager : MonoBehaviour
         }
     }
 
-    public int NeighbourIterations = 3;
+    // Values defining the size of the tile map.
     public int Columns = 10;
     public int Rows = 10;
+
+    // How many times we should iterate over the tile map to ensure the neighbouring tile types are correct.
+    public int NeighbourIterations = 3;
+
+    // Values defining how tiles are placed and moved in the world.
     public float ScaleFactor = 1.28f;
     public float ScrollFactor = 0.01f;
+
+    // Values defining the types of stars to spawn.
     public int DenseTileChance = 33;
     public int SparseTileChance = 33;
     public int EmptyTileChance = 33;
+
+    // The maximum number of individual stars to spawn on the closer background layer.
     public int MaxStarsToSpawn = 100;
+
+    // GameObject arrays holding the tiles and stars we'll spawn into the world.
     public GameObject[] DenseStarTiles;
     public GameObject[] SparseStarTiles;
     public GameObject[] EmptyStarTiles;
     public GameObject[] IndividualStars;
 
+    // Public reference to the player's camera.
     public GameObject Camera;
 
+    // Private transforms which we'll use to transform the stars, and keep them contained neatly in the object hierarchy.
     private Transform TileHolder;
     private Transform StarHolder;
+
+    // Dictionary of array indices to tile objects.
+    // #TODO: This could probably be replaced with an array.
     private Dictionary<int, Tile> StarTiles = new Dictionary<int, Tile>();
+
+    // Calculated position offset for the tiles.
     private float PositionOffset;
 
     private void Start()
@@ -57,43 +76,50 @@ public class TileManager : MonoBehaviour
 
         PositionOffset = ScaleFactor * (Rows / 2);
 
+        // Start by spawning a random number of dense star tiles.
         int DenseTilesToSpawn = Random.Range(DenseTileChance / 2, DenseTileChance);
         int DenseTilesSpawned = 0;
         while (DenseTilesSpawned < DenseTilesToSpawn)
         {
-            int ArrayPos = Random.Range(0, 99);
-            if (!StarTiles.ContainsKey(ArrayPos))
+            // First, check that we're spawning the tile in an unoccupied space.
+            int ArrayIndex = Random.Range(0, 99);
+            if (!StarTiles.ContainsKey(ArrayIndex))
             {
-                int xPos = ArrayPos % Columns;
-                int yPos = (ArrayPos - xPos) / Rows;
+                // Calculate the position.
+                int xPos = ArrayIndex % Columns;
+                int yPos = (ArrayIndex - xPos) / Rows;
 
+                // Set a random tile number out of the tiles in the dense tiles array.
                 int TileNumber = Random.Range(0, DenseStarTiles.Length);
 
-                StarTiles.Add(ArrayPos, new Tile(TileDensity.Dense, TileNumber, xPos, yPos));
+                // Add the star tile.
+                StarTiles.Add(ArrayIndex, new Tile(TileDensity.Dense, TileNumber, xPos, yPos));
 
+                // Increment the count of star tiles spawned.
                 DenseTilesSpawned++;
             }
         }
 
-        // Add a small number of sparse tiles.
+        // Add a small number of sparse tiles, using the same method we used for the dense star tiles.
         int SparseTilesToSpawn = Random.Range(SparseTileChance / 4, SparseTileChance / 2);
         int SparseTilesSpawned = 0;
         while (SparseTilesSpawned < SparseTilesToSpawn)
         {
-            int ArrayPos = Random.Range(0, 99);
-            if (!StarTiles.ContainsKey(ArrayPos))
+            int ArrayIndex = Random.Range(0, 99);
+            if (!StarTiles.ContainsKey(ArrayIndex))
             {
-                int xPos = ArrayPos % Columns;
-                int yPos = (ArrayPos - xPos) / Rows;
+                int xPos = ArrayIndex % Columns;
+                int yPos = (ArrayIndex - xPos) / Rows;
 
                 int TileNumber = Random.Range(0, SparseStarTiles.Length);
 
-                StarTiles.Add(ArrayPos, new Tile(TileDensity.Sparse, TileNumber, xPos, yPos));
+                StarTiles.Add(ArrayIndex, new Tile(TileDensity.Sparse, TileNumber, xPos, yPos));
 
                 SparseTilesSpawned++;
             }
         }
 
+        // Create a temporary dictionary for adding new elements to the star tile dictionary.
         Dictionary<int, Tile> TempStarTiles = new Dictionary<int, Tile>();
 
         // Now add valid neighbours around each tile.
@@ -105,35 +131,40 @@ public class TileManager : MonoBehaviour
 
                 int CurrentTile = StarTile.x + StarTile.y * Rows;
 
+                // Left neighbour.
                 if (StarTile.x > 0)
                 {
-                    int ArrayPos = CurrentTile - 1;
+                    int ArrayIndex = CurrentTile - 1;
 
-                    TryAddNewTile(ref TempStarTiles, ArrayPos, StarTile);
+                    TryAddNewTile(ref TempStarTiles, ArrayIndex, StarTile);
                 }
 
+                // Right neighbour.
                 if (StarTile.x < Columns - 1)
                 {
-                    int ArrayPos = CurrentTile + 1;
+                    int ArrayIndex = CurrentTile + 1;
 
-                    TryAddNewTile(ref TempStarTiles, ArrayPos, StarTile);
+                    TryAddNewTile(ref TempStarTiles, ArrayIndex, StarTile);
                 }
 
+                // Bottom neighbour.
                 if (StarTile.y > 0)
                 {
-                    int ArrayPos = CurrentTile - Rows;
+                    int ArrayIndex = CurrentTile - Rows;
 
-                    TryAddNewTile(ref TempStarTiles, ArrayPos, StarTile);
+                    TryAddNewTile(ref TempStarTiles, ArrayIndex, StarTile);
                 }
 
+                // Top neighbour.
                 if (StarTile.y < Rows - 1)
                 {
-                    int ArrayPos = CurrentTile + Rows;
+                    int ArrayIndex = CurrentTile + Rows;
 
-                    TryAddNewTile(ref TempStarTiles, ArrayPos, StarTile);
+                    TryAddNewTile(ref TempStarTiles, ArrayIndex, StarTile);
                 }
             }
 
+            // Add the new neighbouring tiles to the dictionary.
             foreach (KeyValuePair<int, Tile> Entry in TempStarTiles)
             {
                 if (!StarTiles.ContainsKey(Entry.Key))
@@ -146,9 +177,12 @@ public class TileManager : MonoBehaviour
                 }
             }
 
+            // Empty the temp star tiles dictionary for the next iteration.
             TempStarTiles.Clear();
         }
 
+        // Now go through the entire tile dictionary; if it doesn't contain an entry, add an empty tile there.
+        // Also, if the tile type is None for some reason, set it to be empty as well.
         for (int i = 0; i < Columns * Rows; i++)
         {
             if (!StarTiles.ContainsKey(i))
@@ -172,33 +206,39 @@ public class TileManager : MonoBehaviour
             int OutTileNumber = Entry.Value.Number;
             int MaxTileNumber = EmptyStarTiles.Length - 1;
 
+            // Right neighbour.
             if (StarTiles.ContainsKey(Entry.Key + 1))
             {
                 IncrementTileNumber(StarTile.Number, StarTiles[Entry.Key + 1].Number, MaxTileNumber, OutTileNumber);
             }
 
+            // Left neighbour.
             if (StarTiles.ContainsKey(Entry.Key - 1))
             {
                 IncrementTileNumber(StarTile.Number, StarTiles[Entry.Key - 1].Number, MaxTileNumber, OutTileNumber);
             }
 
+            // Top neighbour.
             if (StarTiles.ContainsKey(Entry.Key + Rows))
             {
                 IncrementTileNumber(StarTile.Number, StarTiles[Entry.Key + Rows].Number, MaxTileNumber, OutTileNumber);
             }
 
+            // Bottom neighbour.
             if (StarTiles.ContainsKey(Entry.Key - Rows))
             {
                 IncrementTileNumber(StarTile.Number, StarTiles[Entry.Key - Rows].Number, MaxTileNumber, OutTileNumber);
             }
-
+            
             Entry.Value.Number = OutTileNumber;
         }
 
+        // Now we can finally create the actual star tiles GameObjects.
         foreach (KeyValuePair<int, Tile> Entry in StarTiles)
         {
             Tile StarTile = Entry.Value;
 
+            // Get the tile prefab for the correct density and number.
             GameObject TileToInstantiate = DenseStarTiles[0];
             if (StarTile.Type == TileDensity.Dense)
             {
@@ -218,6 +258,7 @@ public class TileManager : MonoBehaviour
                 TileToInstantiate = EmptyStarTiles[StarTile.Number];
             }
 
+            // If the GameObject is valid, instantiate it and set the new GameObject's parent to be the TileHolder.
             if (TileToInstantiate)
             {
                 GameObject TileInstance = Instantiate<GameObject>(TileToInstantiate, new Vector3((StarTile.x * ScaleFactor) - PositionOffset, (StarTile.y * ScaleFactor) - PositionOffset, 0.0f), Quaternion.identity);
@@ -225,40 +266,50 @@ public class TileManager : MonoBehaviour
             }
         }
 
+        // Finally, spawn in the individual stars.
         int StarsToSpawn = Random.Range(MaxStarsToSpawn / 2, MaxStarsToSpawn);
         for (int i = 0; i < StarsToSpawn; i++)
         {
+            // Get a random star from the individual stars array.
             GameObject StarToInstantiate = IndividualStars[Random.Range(0, IndividualStars.Length)];
 
-            float XPosition = Random.Range(-(ScaleFactor * (Columns)), ScaleFactor * (Columns));
-            float YPosition = Random.Range(-(ScaleFactor * (Rows)), ScaleFactor * (Rows));
+            // Give the star a random position.
+            float XPosition = Random.Range(-(ScaleFactor * (Columns) * 1.4f), ScaleFactor * (Columns) * 1.4f);
+            float YPosition = Random.Range(-(ScaleFactor * (Rows) * 1.4f), ScaleFactor * (Rows) * 1.4f);
             Vector3 RandomPosition = new Vector3(XPosition, YPosition, 0.0f);
 
+            // Instantiate the star, and set its parent to be the StarHolder.
             GameObject StarInstance = Instantiate<GameObject>(StarToInstantiate, RandomPosition, Quaternion.identity);
             StarInstance.transform.SetParent(StarHolder);
         }
     }
 
-    private void TryAddNewTile(ref Dictionary<int, Tile> TempStarTiles, int ArrayPos, Tile StarTile)
+    // Try to add a new, valid tile to the input dictionary. Otherwise decrement the tile type at the already present location.
+    // This function is used for adding neighbouring tiles of lower types around already existing tiles.
+    private void TryAddNewTile(ref Dictionary<int, Tile> TempStarTiles, int ArrayIndex, Tile StarTile)
     {
-        if (!TempStarTiles.ContainsKey(ArrayPos))
+        if (!TempStarTiles.ContainsKey(ArrayIndex))
         {
-            if (!StarTiles.ContainsKey(ArrayPos))
+            if (!StarTiles.ContainsKey(ArrayIndex))
             {
+                // Add a new tile of the correct density at this location.
                 TileDensity NewTileDensity = (StarTile.Type - 1 >= TileDensity.Empty) ? StarTile.Type - 1 : TileDensity.Empty;
                 int TileNumber = Random.Range(0, SparseStarTiles.Length);
-                int xPos = ArrayPos % Columns;
-                int yPos = (ArrayPos - xPos) / Rows;
+                int xPos = ArrayIndex % Columns;
+                int yPos = (ArrayIndex - xPos) / Rows;
 
-                TempStarTiles.Add(ArrayPos, new Tile(NewTileDensity, TileNumber, xPos, yPos));
+                TempStarTiles.Add(ArrayIndex, new Tile(NewTileDensity, TileNumber, xPos, yPos));
             }
-            else if ((StarTiles[ArrayPos].Type >= TileDensity.Sparse) && (StarTiles[ArrayPos].Type < StarTile.Type - 1))
+            else if ((StarTiles[ArrayIndex].Type >= TileDensity.Sparse) && (StarTiles[ArrayIndex].Type < StarTile.Type - 1))
             {
-                StarTiles[ArrayPos].Type = StarTile.Type - 1;
+                // Decrement the index of the alreadt existing tile.
+                StarTiles[ArrayIndex].Type = StarTile.Type - 1;
             }
         }
     }
 
+    // Increment the input tile up to the max number of tiles. If we hit the max, wrap around to 0.
+    // This function is used to ensure that no two neighbouring tiles of the same density have the same tile number.
     private void IncrementTileNumber(int InTileNum, int NeighbourTileNum, int Max, int OutTileNum)
     {
         if (InTileNum == NeighbourTileNum)
@@ -276,8 +327,11 @@ public class TileManager : MonoBehaviour
 
     private void Update()
     {
+        // Calculate scroll distances for the parallax scrolling effect on the background layers.
         Vector2 ScrollDist = new Vector2(Camera.transform.position.x * ScrollFactor, Camera.transform.position.y * ScrollFactor);
         Vector2 StarScrollDist = ScrollDist / 2;
+
+        // Transform the holder GameObjects based on the scroll distances.
         TileHolder.position = new Vector3(ScrollDist.x, ScrollDist.y, TileHolder.transform.position.z);
         StarHolder.position = new Vector3(StarScrollDist.x, StarScrollDist.y, StarHolder.position.z);
     }
