@@ -39,7 +39,7 @@ public class TileManager : MonoBehaviour
 
     // Values defining how tiles are placed and moved in the world.
     public float ScaleFactor = 1.28f;
-    public float ScrollFactor = 0.01f;
+    public float ScrollSpeed = 0.9f;
 
     // Values defining the types of stars to spawn.
     public int DenseTileChance = 33;
@@ -68,6 +68,7 @@ public class TileManager : MonoBehaviour
 
     // Calculated position offset for the tiles.
     private float PositionOffset;
+    private float StarScrollSpeed;
 
     private void Start()
     {
@@ -75,6 +76,8 @@ public class TileManager : MonoBehaviour
         StarHolder = new GameObject("Individual Stars").transform;
 
         PositionOffset = ScaleFactor * (Rows / 2);
+
+        StarScrollSpeed = ScrollSpeed - (1.0f - ScrollSpeed);
 
         // Start by spawning a random number of dense star tiles.
         int DenseTilesToSpawn = Random.Range(DenseTileChance / 2, DenseTileChance);
@@ -209,27 +212,27 @@ public class TileManager : MonoBehaviour
             // Right neighbour.
             if (StarTiles.ContainsKey(Entry.Key + 1))
             {
-                IncrementTileNumber(StarTile.Number, StarTiles[Entry.Key + 1].Number, MaxTileNumber, OutTileNumber);
+                IncrementTileNumber(StarTile.Number, StarTiles[Entry.Key + 1].Number, MaxTileNumber, ref OutTileNumber);
             }
 
             // Left neighbour.
             if (StarTiles.ContainsKey(Entry.Key - 1))
             {
-                IncrementTileNumber(StarTile.Number, StarTiles[Entry.Key - 1].Number, MaxTileNumber, OutTileNumber);
+                IncrementTileNumber(StarTile.Number, StarTiles[Entry.Key - 1].Number, MaxTileNumber, ref OutTileNumber);
             }
 
             // Top neighbour.
             if (StarTiles.ContainsKey(Entry.Key + Rows))
             {
-                IncrementTileNumber(StarTile.Number, StarTiles[Entry.Key + Rows].Number, MaxTileNumber, OutTileNumber);
+                IncrementTileNumber(StarTile.Number, StarTiles[Entry.Key + Rows].Number, MaxTileNumber, ref OutTileNumber);
             }
 
             // Bottom neighbour.
             if (StarTiles.ContainsKey(Entry.Key - Rows))
             {
-                IncrementTileNumber(StarTile.Number, StarTiles[Entry.Key - Rows].Number, MaxTileNumber, OutTileNumber);
+                IncrementTileNumber(StarTile.Number, StarTiles[Entry.Key - Rows].Number, MaxTileNumber, ref OutTileNumber);
             }
-            
+
             Entry.Value.Number = OutTileNumber;
         }
 
@@ -274,8 +277,8 @@ public class TileManager : MonoBehaviour
             GameObject StarToInstantiate = IndividualStars[Random.Range(0, IndividualStars.Length)];
 
             // Give the star a random position.
-            float XPosition = Random.Range(-(ScaleFactor * (Columns) * 1.4f), ScaleFactor * (Columns) * 1.4f);
-            float YPosition = Random.Range(-(ScaleFactor * (Rows) * 1.4f), ScaleFactor * (Rows) * 1.4f);
+            float XPosition = Random.Range(-(ScaleFactor * Columns), ScaleFactor * Columns);
+            float YPosition = Random.Range(-(ScaleFactor * Rows), ScaleFactor * Rows);
             Vector3 RandomPosition = new Vector3(XPosition, YPosition, 0.0f);
 
             // Instantiate the star, and set its parent to be the StarHolder.
@@ -310,7 +313,7 @@ public class TileManager : MonoBehaviour
 
     // Increment the input tile up to the max number of tiles. If we hit the max, wrap around to 0.
     // This function is used to ensure that no two neighbouring tiles of the same density have the same tile number.
-    private void IncrementTileNumber(int InTileNum, int NeighbourTileNum, int Max, int OutTileNum)
+    private void IncrementTileNumber(int InTileNum, int NeighbourTileNum, int Max, ref int OutTileNum)
     {
         if (InTileNum == NeighbourTileNum)
         {
@@ -328,8 +331,8 @@ public class TileManager : MonoBehaviour
     private void Update()
     {
         // Calculate scroll distances for the parallax scrolling effect on the background layers.
-        Vector2 ScrollDist = new Vector2(Camera.transform.position.x * ScrollFactor, Camera.transform.position.y * ScrollFactor);
-        Vector2 StarScrollDist = ScrollDist / 2;
+        Vector2 ScrollDist = new Vector2(Camera.transform.position.x * ScrollSpeed, Camera.transform.position.y * ScrollSpeed);
+        Vector2 StarScrollDist = new Vector2(Camera.transform.position.x * StarScrollSpeed, Camera.transform.position.y * StarScrollSpeed);
 
         // Transform the holder GameObjects based on the scroll distances.
         TileHolder.position = new Vector3(ScrollDist.x, ScrollDist.y, TileHolder.transform.position.z);
