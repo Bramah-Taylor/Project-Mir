@@ -16,6 +16,7 @@ public class CameraManager : MonoBehaviour
     private float DefaultCameraDistance;
 
     private Camera CameraComponent;
+    private GameManager GameManager;
 
     // TODO:
     //      - Add zoom
@@ -26,6 +27,8 @@ public class CameraManager : MonoBehaviour
     private void Start()
     {
         CameraComponent = this.gameObject.GetComponent<Camera>();
+
+        GameManager = Object.FindObjectOfType<GameManager>();
 
         Cursor.visible = false;
         DefaultCameraDistance = Vector3.Distance(transform.position, CameraComponent.transform.position);
@@ -47,6 +50,14 @@ public class CameraManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Cursor.visible = !Cursor.visible;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Ray ray = CameraComponent.ScreenPointToRay(Input.mousePosition);
+            Vector3 OutWorldPosition = new Vector3(ray.origin.x, ray.origin.y, 0.0f);
+
+            GameManager.SetWaypoint(OutWorldPosition);
         }
     }
 }
