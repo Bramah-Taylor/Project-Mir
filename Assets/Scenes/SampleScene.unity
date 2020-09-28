@@ -371,52 +371,18 @@ LightingSettings:
   m_PVRFilteringAtrousPositionSigmaDirect: 0.5
   m_PVRFilteringAtrousPositionSigmaIndirect: 2
   m_PVRFilteringAtrousPositionSigmaAO: 1
---- !u!1 &1621663108 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 69442194618526557, guid: 57e98741e16881443a3dd5f22899eac4,
+--- !u!114 &1621663109 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1621663109, guid: 57e98741e16881443a3dd5f22899eac4,
     type: 3}
   m_PrefabInstance: {fileID: 69442193752122713}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1621663109
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1621663108}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e0a57655eed878144b8f9c49e9145781, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TimeToTarget: 0.1
-  SlowRadius: 1.5
-  AngularTolerance: 10
-  MaxAcceleration: 1
-  MaxVelocity: 0.5
-  AngularAcceleration: 5
-  MaxAngularVelocity: 30
---- !u!50 &1621663111
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1621663108}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 1
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!1 &1694057919
 GameObject:
   m_ObjectHideFlags: 0
@@ -781,7 +747,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1897424814365180474, guid: 1ed1194c9d9cc8a4f8e1905fc67466d9, type: 3}
+    - {fileID: 1897424814065534374, guid: 1ed1194c9d9cc8a4f8e1905fc67466d9, type: 3}
+    - {fileID: 1897424813423222402, guid: 1ed1194c9d9cc8a4f8e1905fc67466d9, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1ed1194c9d9cc8a4f8e1905fc67466d9, type: 3}
 --- !u!1001 &3259322867368628761
 PrefabInstance:

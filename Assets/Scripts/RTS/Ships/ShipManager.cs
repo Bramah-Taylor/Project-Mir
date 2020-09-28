@@ -13,6 +13,9 @@ public class ShipManager : MonoBehaviour
     public float AngularAcceleration;   // Angular acceleration to apply as torque to the ship.
     public float MaxAngularVelocity;    // Maximum angular velocity of the ship.
 
+    // Public reference to the animator component on the engine child object.
+    public Animator EngineAnimator;
+
     // Private reference to the global game manager.
     private GameManager GameManager;
 
@@ -142,6 +145,11 @@ public class ShipManager : MonoBehaviour
     public void BeginMove(Vector3 Position, GameObject Waypoint)
     {
         bShouldMove = true;
+        
+        if (EngineAnimator)
+        {
+            EngineAnimator.SetTrigger("StartMove");
+        }
 
         TargetPosition = Position;
 
@@ -157,6 +165,11 @@ public class ShipManager : MonoBehaviour
     private void EndMove()
     {
         bShouldMove = false;
+
+        if (EngineAnimator)
+        {
+            EngineAnimator.SetTrigger("EndMove");
+        }
 
         if (CurrentWaypoint)
         {

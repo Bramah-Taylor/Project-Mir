@@ -59,5 +59,10 @@ public class CameraManager : MonoBehaviour
 
             GameManager.SetWaypoint(OutWorldPosition);
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 }
