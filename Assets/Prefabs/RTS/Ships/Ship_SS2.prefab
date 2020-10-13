@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3259322868030717538}
+  - component: {fileID: 6498358160743075788}
+  - component: {fileID: 120562557588471335}
   m_Layer: 0
   m_Name: Ship_SS2
   m_TagString: Untagged
@@ -33,6 +35,47 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &6498358160743075788
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3259322868030717539}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 1
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!114 &120562557588471335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3259322868030717539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0a57655eed878144b8f9c49e9145781, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TimeToTarget: 0.1
+  SlowRadius: 1.5
+  AngularTolerance: 20
+  MaxMoveSpeed: 0.9
+  MaxVelocity: 0.5
+  AngularAcceleration: 7
+  MaxAngularVelocity: 45
+  EngineAnimator: {fileID: 5671712503714003469}
 --- !u!1 &3259322868870982931
 GameObject:
   m_ObjectHideFlags: 0
@@ -43,6 +86,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3259322868870982930}
   - component: {fileID: 3259322868870982933}
+  - component: {fileID: 5671712503714003469}
   m_Layer: 0
   m_Name: SS2_EngineSprites
   m_TagString: Untagged
@@ -112,9 +156,28 @@ SpriteRenderer:
   m_Size: {x: 0.09, y: 0.12}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &5671712503714003469
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3259322868870982931}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a6001678b5302644aaa0440dab643d84, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &3259322868941664359
 GameObject:
   m_ObjectHideFlags: 0
