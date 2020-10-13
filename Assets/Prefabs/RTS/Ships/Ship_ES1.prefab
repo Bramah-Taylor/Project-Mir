@@ -234,8 +234,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TimeToTarget: 0.1
   SlowRadius: 1.5
-  AngularTolerance: 10
-  MaxAcceleration: 0.8
+  AngularTolerance: 15
+  MaxMoveSpeed: 0.5
   MaxVelocity: 0.5
   AngularAcceleration: 5
   MaxAngularVelocity: 35

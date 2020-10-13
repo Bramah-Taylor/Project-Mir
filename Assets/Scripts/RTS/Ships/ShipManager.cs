@@ -8,7 +8,7 @@ public class ShipManager : MonoBehaviour
     public float TimeToTarget;          // Timesteps for acceleration.
     public float SlowRadius;            // Radius at which to start slowing the ship down.
     public float AngularTolerance;      // Angle at which to start slowing the ship's rotation.
-    public float MaxAcceleration;       // Maximum acceleration of the ship.
+    public float MaxMoveSpeed;          // Maximum movement speed of the ship.
     public float MaxVelocity;           // Maximum velocity of the ship.
     public float AngularAcceleration;   // Angular acceleration to apply as torque to the ship.
     public float MaxAngularVelocity;    // Maximum angular velocity of the ship.
@@ -130,10 +130,10 @@ public class ShipManager : MonoBehaviour
             Steer /= TimeToTarget;
 
             // Clamp acceleration to within acceptable limits.
-            if (Steer.magnitude > MaxAcceleration)
+            if (Steer.magnitude > MaxMoveSpeed)
             {
                 Steer.Normalize();
-                Steer += Steer * (MaxAcceleration - Steer.magnitude);
+                Steer += Steer * (MaxMoveSpeed - Steer.magnitude);
             }
 
             // Apply new acceleration as a force.
