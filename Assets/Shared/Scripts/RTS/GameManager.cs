@@ -9,10 +9,14 @@ public class GameManager : MonoBehaviour
 
     private List<GameObject> ActiveWaypoints;
 
+    private int CurrentSpriteCount;
+
     void Start()
     {
         Application.targetFrameRate = 60;
         ActiveWaypoints = new List<GameObject>();
+
+        CurrentSpriteCount = 0;
     }
 
     public void SetWaypoint(Vector3 Position)
@@ -34,5 +38,21 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Unknown game object in RemoveWaypoint.");
         }
+    }
+
+    public void RegisterShipSprites(SpriteRenderer[] InputSprites)
+    {
+        int NewMaxSprite = 0;
+        foreach (SpriteRenderer Sprite in InputSprites)
+        {
+            if (Sprite.sortingOrder > NewMaxSprite)
+            {
+                NewMaxSprite = Sprite.sortingOrder;
+            }
+
+            Sprite.sortingOrder += CurrentSpriteCount;
+        }
+
+        CurrentSpriteCount += NewMaxSprite;
     }
 }

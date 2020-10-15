@@ -75,6 +75,10 @@ MonoBehaviour:
   MaxVelocity: 0.5
   AngularAcceleration: 7
   MaxAngularVelocity: 45
+  SpriteComponents:
+  - {fileID: 3259322868941664409}
+  - {fileID: 3259322869124176610}
+  - {fileID: 3259322868870982933}
   EngineAnimator: {fileID: 5671712503714003469}
 --- !u!1 &3259322868870982931
 GameObject:
@@ -147,7 +151,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: d3b005eb68618cd46970d7e28c9188b3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -248,7 +252,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1612048811
   m_SortingLayer: -1
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: fd5f3061c5d2d8b4dbf4e28410840e95, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -330,7 +334,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1612048811
   m_SortingLayer: -1
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: d933c278fdbe5714294957016aad526c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

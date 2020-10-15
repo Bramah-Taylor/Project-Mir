@@ -13,6 +13,8 @@ public class ShipManager : MonoBehaviour
     public float AngularAcceleration;   // Angular acceleration to apply as torque to the ship.
     public float MaxAngularVelocity;    // Maximum angular velocity of the ship.
 
+    public SpriteRenderer[] SpriteComponents;
+
     // Public reference to the animator component on the engine child object.
     public Animator EngineAnimator;
 
@@ -41,6 +43,8 @@ public class ShipManager : MonoBehaviour
         PhysicsComponent = GetComponent<Rigidbody2D>();
         
         StopRadius = SlowRadius / 4.0f;
+
+        GameManager.RegisterShipSprites(SpriteComponents);
     }
     
     // On fixed update, perform movement.
